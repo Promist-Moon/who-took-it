@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const video = document.querySelector("#camera");
+  const record = document.querySelector("#record-dot");
 
+  // constants
+  let isDetecting = false;
+  let watchInterval = null;
+
+  // ensure camera is always running
   async function startCamera() {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -12,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("Camera error:", err);
 
-      // Optional: show message on screen
+      // show message on screen
       const stage = document.querySelector(".camera-stage");
       stage.innerHTML = `<div class="stage-placeholder">
         Could not access camera. Check browser permissions.
@@ -20,5 +26,77 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function toggleDetector() {
+    if (!isDetecting) {
+      watchActivity();
+      isDetecting = true;
+    } else {
+      stopWatching();
+      isDetecting = false;
+    }
+
+    record?.classList.toggle("active");
+  }
+
+  function watchActivity() {
+    // check if existing interval
+    if (watchInterval) {
+      return;
+    }
+
+    // collect frames every second
+    watchInterval = setInterval(() => {
+      const framePromise = captureFrame();
+      if (!framePromise) {
+        return;
+      }
+
+      framePromise.then((frameBlob) => {
+        if (!frameBlob) {
+          return;
+        }
+        console.log("Captured frame");
+        // Later send frameBlob to Django / ML
+        analyseFrame(frameBlob);
+      });
+    }, 1000);
+
+  }
+
+  function stopWatching() {
+    if (watchInterval) {
+      clearInterval(watchInterval);
+      watchInterval = null;
+    }
+  }
+
+  // capture the frames into a jpeg blob for processing
+  async function captureFrame() {
+    // check whether video frame can be processed
+    if (video.readyState < 2) {
+      console.warn("Video not ready for capturing frame");
+      return null;
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext("2d");
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob);
+      }, "image/jpeg", 0.85);
+    });
+  }
+
+  // jaye's code
+  function analyseFrame(frameBlob) {
+    // InsightFace analysis goes here
+    console.log("Analysing frame...");
+  }
+
+  record?.addEventListener("click", toggleDetector);
   startCamera();
 });
