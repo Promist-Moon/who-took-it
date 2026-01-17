@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Later send frameBlob to Django / ML
         analyseFrame(frameBlob);
       });
-    }, 1000);
+    }, 2000);
 
   }
 
