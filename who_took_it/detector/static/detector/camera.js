@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const video = document.querySelector("#camera");
+  const recordDot = document.querySelector("#record-dot");
+
+  const isRecording = false;
 
   async function startCamera() {
     try {
@@ -18,6 +21,15 @@ document.addEventListener("DOMContentLoaded", () => {
         Could not access camera. Check browser permissions.
       </div>`;
     }
+  }
+
+  function toggleRecordDot() {
+    if (!isRecording) {
+      recordDot.addEventListener("click", startRecording());
+    } else {
+      recordDot.removeEventListener("click", startRecording());
+    }
+    
   }
 
   startCamera();
