@@ -14,7 +14,7 @@
             </div>
 
             <div class="record-wrap">
-                <div class="record-dot" title="Record / Capture"></div>
+                <div id="record-dot" class="record-dot" title="Record / Capture"></div>
             </div>
         </div>
 
@@ -27,6 +27,12 @@
         <div class="text-center text-muted medium">
             Don't be greedy lah.
         </div>
+        </div>
+
+        <audio id="alert-sound" src="{% static 'detector/assets/alarm.mp3' %}" preload="auto"></audio>
+
+        <div id="alert-overlay" class="alert-overlay hidden">
+            <div class="alert-box">THIEF ALERT THIEF ALERT</div>
         </div>
     </div>
 {% endblock %}
