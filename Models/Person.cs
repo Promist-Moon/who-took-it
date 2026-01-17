@@ -12,7 +12,4 @@ public class Person : BaseModel
 
     [Column("created_at")]
     public DateTimeOffset CreatedAt { get; set; }
-
-    [Column("last_seen_at")]
-    public DateTimeOffset? LastSeenAt { get; set; }
 }

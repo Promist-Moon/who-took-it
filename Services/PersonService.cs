@@ -70,12 +70,7 @@ public class PersonService
     public async Task<Person> AddAsync(Person person)
     {
         // Minimal payload; let Supabase defaults generate id/created_at
-        var payloadObj = new Dictionary<string, object?>();
-
-        if (person.LastSeenAt is not null)
-            payloadObj["last_seen_at"] = person.LastSeenAt;
-
-        var payload = JsonSerializer.Serialize(payloadObj, JsonOptions);
+        var payload = "{}";
         var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
         var resp = await _http.PostAsync($"/rest/v1/{_table}", content);
@@ -88,10 +83,7 @@ public class PersonService
 
     public async Task<Person?> UpdateAsync(Guid id, Person person)
     {
-        var payloadObj = new Dictionary<string, object?>
-        {
-            ["last_seen_at"] = person.LastSeenAt
-        };
+        var payloadObj = new Dictionary<string, object?>();
 
         var payload = JsonSerializer.Serialize(payloadObj, JsonOptions);
         var req = new HttpRequestMessage(new HttpMethod("PATCH"), $"/rest/v1/{_table}?id=eq.{id}")
