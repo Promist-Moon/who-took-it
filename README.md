@@ -14,3 +14,5 @@ Frontend: HTMLCSS, JavaScript, Django
 Backend: Supabase, .NET, C#
 Image Recognition: InsightFace, Numpy
 
+## Acknowledgements
+Font used: [Enchanted Land](https://www.dafont.com/enchanted-land.font)
